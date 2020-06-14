@@ -43,7 +43,7 @@ impl TryFrom<[u8; 4]> for ChunkType {
     type Error = Error;
 
     fn try_from(bytes: [u8; 4]) -> Result<Self> {
-        if bytes.is_ascii() {
+        if bytes.iter().all(|&c| (c as char).is_ascii_alphabetic()) {
             Ok(ChunkType(bytes))
         } else {
             Err(Error::Custom("Invalid assii literals".to_string()))
@@ -68,7 +68,7 @@ impl FromStr for ChunkType {
         if s.len() > BYTE_SIZE {
             return Err(Error::Custom("Too long lenght of chunk type".to_string()));
         }
-        if !s.is_ascii() || !s.chars().all(|c| c.is_ascii_alphabetic()) {
+        if !s.chars().all(|c| c.is_ascii_alphabetic()) {
             return Err(Error::Custom("Invalid assii literal".to_string()));
         }
         let mut chunk = [1; BYTE_SIZE];
