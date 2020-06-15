@@ -9,7 +9,8 @@ pub enum Error {
     Io(io::Error),
     Fmt(std::fmt::Error),
     ParseInt(std::num::ParseIntError),
-    Utf8Err(usize),
+    Utf8Err(std::str::Utf8Error),
+    FromUtf8Error(std::string::FromUtf8Error),
 }
 
 impl From<std::fmt::Error> for Error {
@@ -38,7 +39,13 @@ impl From<std::num::ParseIntError> for Error {
 
 impl From<std::str::Utf8Error> for Error {
     fn from(e: std::str::Utf8Error) -> Self {
-        Self::Utf8Err(e.valid_up_to())
+        Self::Utf8Err(e)
+    }
+}
+
+impl From<std::string::FromUtf8Error> for Error {
+    fn from(e: std::string::FromUtf8Error) -> Self {
+        Self::FromUtf8Error(e)
     }
 }
 
@@ -49,7 +56,8 @@ impl fmt::Display for Error {
             Self::Io(e) => write!(f, "{}", e),
             Self::ParseInt(e) => write!(f, "{}", e),
             Self::Fmt(e) => write!(f, "{}", e),
-            Self::Utf8Err(num) => write!(f, "Invalid byte was encountered on index: {}", num),
+            Self::Utf8Err(e) => write!(f, "{}", e),
+            Self::FromUtf8Error(e) => write!(f, "{}", e),
         }
     }
 }
