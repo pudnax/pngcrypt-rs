@@ -10,7 +10,7 @@ pub struct Chunk {
     length: usize,
     chunk_type: ChunkType,
     data: Vec<u8>,
-    crc: usize,
+    crc: u32,
 }
 
 impl Chunk {
@@ -19,7 +19,8 @@ impl Chunk {
             length: data.len(),
             chunk_type,
             data,
-            crc: todo!(),
+            // TODO: Don't forget implement crc hashing
+            crc: 0,
         }
     }
 
@@ -36,10 +37,14 @@ impl Chunk {
     }
 
     fn data_as_string(&self) -> Result<String> {
-        todo!()
+        Ok(String::from_utf8(self.data.clone())?)
     }
 
-    fn crc(&self) -> usize {
+    fn crc(&self) -> u32 {
+        self.crc
+    }
+
+    fn as_bytes(&self) -> Vec<u8> {
         todo!()
     }
 }
@@ -54,7 +59,7 @@ impl TryFrom<&[u8]> for Chunk {
 
 impl Display for Chunk {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!()
+        write!(f, "{}", self.to_string())
     }
 }
 
