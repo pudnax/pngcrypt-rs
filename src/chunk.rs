@@ -40,7 +40,7 @@ impl Chunk {
         Ok(String::from_utf8(self.data.clone())?)
     }
 
-    // TODO: Make my own implementation of crc hashing
+    // TODO(#2): Make my own implementation of crc hashing
     fn crc(&self) -> u32 {
         self.crc
     }
