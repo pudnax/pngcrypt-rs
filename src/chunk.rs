@@ -15,12 +15,14 @@ pub struct Chunk {
 
 impl Chunk {
     fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
+        let hashing_data = [chunk_type.bytes(), data.as_slice()].concat();
+        let crc = crc::crc32::checksum_ieee(&hashing_data);
         Chunk {
             length: data.len(),
             chunk_type,
             data,
             // TODO(#1): Don't forget implement crc hashing
-            crc: 0,
+            crc,
         }
     }
 
@@ -46,7 +48,7 @@ impl Chunk {
     }
 
     fn as_bytes(&self) -> Vec<u8> {
-        todo!()
+        [self.data.as_slice(), self.chunk_type.bytes()].concat()
     }
 }
 
