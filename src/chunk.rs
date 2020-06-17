@@ -21,7 +21,6 @@ impl Chunk {
             length: data.len(),
             chunk_type,
             data,
-            // TODO(#1): Don't forget implement crc hashing
             crc,
         }
     }
