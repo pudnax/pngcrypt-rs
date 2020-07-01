@@ -41,7 +41,7 @@ impl Chunk {
         &self.chunk_data
     }
 
-    // TODO: Delete public idetifier
+    // TODO(#4): Delete public idetifier
     pub fn data_as_string(&self) -> Result<String> {
         Ok(String::from_utf8(self.chunk_data.clone())?)
     }
