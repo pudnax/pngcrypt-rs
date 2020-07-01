@@ -1,15 +1,19 @@
 use std::convert::TryFrom;
+use std::io::Read;
+
+use std::convert::TryInto;
 use std::fmt::{self, Display};
 
 use crate::{
-    chunk_type::ChunkType,
+    chunk_type::{ChunkType, BYTE_SIZE},
     error::{Error, Result},
 };
 
+// TODO: Does it make sence too use Vec?
 pub struct Chunk {
     length: usize,
     chunk_type: ChunkType,
-    data: Vec<u8>,
+    chunk_data: Vec<u8>,
     crc: u32,
 }
 
@@ -20,7 +24,7 @@ impl Chunk {
         Chunk {
             length: data.len(),
             chunk_type,
-            data,
+            chunk_data: data,
             crc,
         }
     }
@@ -34,11 +38,12 @@ impl Chunk {
     }
 
     fn data(&self) -> &[u8] {
-        &self.data
+        &self.chunk_data
     }
 
-    fn data_as_string(&self) -> Result<String> {
-        Ok(String::from_utf8(self.data.clone())?)
+    // TODO: Delete public idetifier
+    pub fn data_as_string(&self) -> Result<String> {
+        Ok(String::from_utf8(self.chunk_data.clone())?)
     }
 
     // TODO(#2): Make my own implementation of crc hashing
@@ -47,15 +52,36 @@ impl Chunk {
     }
 
     fn as_bytes(&self) -> Vec<u8> {
-        [self.data.as_slice(), self.chunk_type.bytes()].concat()
+        [self.chunk_data.as_slice(), self.chunk_type.bytes()].concat()
     }
 }
 
 impl TryFrom<&[u8]> for Chunk {
-    type Error = Error;
+    type Error = Error<'static>;
 
     fn try_from(value: &[u8]) -> Result<Self> {
-        todo!()
+        let length = u32::from_be_bytes(value[0..BYTE_SIZE].try_into()?) as usize;
+        if value.len() != length + 3 * BYTE_SIZE {
+            return Err(Error::Custom("ChunkData does not contain enough bytes"));
+        }
+        let data: [u8; BYTE_SIZE] = value[BYTE_SIZE..BYTE_SIZE + BYTE_SIZE].try_into()?;
+        let chunk_type: ChunkType = data.try_into()?;
+        let chunk_data = value[2 * BYTE_SIZE..2 * BYTE_SIZE + length].to_vec();
+
+        let hashing_data = [chunk_type.bytes(), chunk_data.as_slice()].concat();
+        let crc = crc::crc32::checksum_ieee(&hashing_data);
+        let used_offset = 2 * BYTE_SIZE + length;
+
+        if crc != u32::from_be_bytes(value[used_offset..used_offset + BYTE_SIZE].try_into()?) {
+            return Err(Error::Custom("assert on crc checksums comparation"));
+        }
+
+        Ok(Chunk {
+            length,
+            chunk_type,
+            chunk_data,
+            crc,
+        })
     }
 }
 
