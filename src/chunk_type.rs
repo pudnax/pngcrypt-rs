@@ -40,13 +40,13 @@ impl ChunkType {
 }
 
 impl TryFrom<[u8; 4]> for ChunkType {
-    type Error = Error;
+    type Error = Error<'static>;
 
     fn try_from(bytes: [u8; 4]) -> Result<Self> {
         if bytes.iter().all(|&c| (c as char).is_ascii_alphabetic()) {
             Ok(ChunkType(bytes))
         } else {
-            Err(Error::Custom("Invalid assii literals".to_string()))
+            Err(Error::Custom("Invalid assii literals"))
         }
     }
 }
@@ -62,14 +62,14 @@ impl fmt::Display for ChunkType {
 }
 
 impl FromStr for ChunkType {
-    type Err = Error;
+    type Err = Error<'static>;
 
     fn from_str(s: &str) -> Result<Self> {
         if s.len() > BYTE_SIZE {
-            return Err(Error::Custom("Too long lenght of chunk type".to_string()));
+            return Err(Error::Custom("Too long lenght of chunk type"));
         }
         if !s.chars().all(|c| c.is_ascii_alphabetic()) {
-            return Err(Error::Custom("Invalid assii literal".to_string()));
+            return Err(Error::Custom("Invalid assii literal"));
         }
         let mut chunk = [1; BYTE_SIZE];
         chunk.clone_from_slice(s.as_bytes());
