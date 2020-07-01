@@ -9,7 +9,7 @@ use crate::{
     error::{Error, Result},
 };
 
-// TODO: Does it make sence too use Vec?
+// TODO(#3): Does it make sence too use Vec?
 pub struct Chunk {
     length: usize,
     chunk_type: ChunkType,
