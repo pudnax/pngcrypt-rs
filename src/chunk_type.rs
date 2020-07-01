@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use crate::{Error, Result};
 
-const BYTE_SIZE: usize = 4;
+pub const BYTE_SIZE: usize = 4;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ChunkType([u8; BYTE_SIZE]);
