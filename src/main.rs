@@ -1,6 +1,8 @@
-use pngme::Result;
+use pngme::{args::Opt, Result};
+use structopt::StructOpt;
 
 fn main() -> Result<()> {
-    println!("Hello, world!");
+    let opt = Opt::from_args();
+    println!("{:#?}", opt);
     Ok(())
 }

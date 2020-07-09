@@ -1,4 +1,4 @@
-mod args;
+pub mod args;
 mod chunk;
 mod chunk_type;
 mod commands;
