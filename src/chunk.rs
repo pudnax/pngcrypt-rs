@@ -10,7 +10,6 @@ use crate::{
 };
 
 // TODO(#3): Does it make sence too use Vec?
-// TODO(#5): Do we need to use #[repr(C)] to proper alighment?
 pub struct Chunk {
     length: u32,
     chunk_type: ChunkType,
