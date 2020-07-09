@@ -1,40 +1,41 @@
 use std::convert::TryFrom;
-use std::io::Read;
 
 use std::convert::TryInto;
 use std::fmt::{self, Display};
 
 use crate::{
-    chunk_type::{ChunkType, BYTE_SIZE},
+    chunk_type::ChunkType,
     error::{Error, Result},
+    BYTE_SIZE,
 };
 
 // TODO(#3): Does it make sence too use Vec?
+// TODO(#5): Do we need to use #[repr(C)] to proper alighment?
 pub struct Chunk {
-    length: usize,
+    length: u32,
     chunk_type: ChunkType,
     chunk_data: Vec<u8>,
     crc: u32,
 }
 
 impl Chunk {
-    fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
+    pub fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
         let hashing_data = [chunk_type.bytes(), data.as_slice()].concat();
         let crc = crc::crc32::checksum_ieee(&hashing_data);
         Chunk {
-            length: data.len(),
+            length: data.len() as u32,
             chunk_type,
             chunk_data: data,
             crc,
         }
     }
 
-    fn chunk_type(&self) -> &ChunkType {
+    pub fn chunk_type(&self) -> &ChunkType {
         &self.chunk_type
     }
 
     fn length(&self) -> usize {
-        self.length
+        self.length as usize
     }
 
     fn data(&self) -> &[u8] {
@@ -51,8 +52,14 @@ impl Chunk {
         self.crc
     }
 
-    fn as_bytes(&self) -> Vec<u8> {
-        [self.chunk_data.as_slice(), self.chunk_type.bytes()].concat()
+    pub fn as_bytes(&self) -> Vec<u8> {
+        [
+            self.length.to_be_bytes().as_ref(),
+            self.chunk_type.bytes(),
+            self.chunk_data.as_slice(),
+            self.crc.to_be_bytes().as_ref(),
+        ]
+        .concat()
     }
 }
 
@@ -77,7 +84,7 @@ impl TryFrom<&[u8]> for Chunk {
         }
 
         Ok(Chunk {
-            length,
+            length: length as u32,
             chunk_type,
             chunk_data,
             crc,
