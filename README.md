@@ -4,7 +4,7 @@
 
 ## Installation
 
-At this point I don't want to publish to crates.io, so the only way to
+At this point I don't want to publish on crates.io, so the only way to
 install the application is to download the source code and build locally.
 
 ```Bash
