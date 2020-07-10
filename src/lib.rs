@@ -5,6 +5,7 @@ mod commands;
 mod error;
 pub mod png;
 
+pub use args::Commands::{Decode, Encode, Print, Remove};
 pub use chunk::Chunk;
 pub use chunk_type::ChunkType;
 pub use commands::{decode, encode, print, remove};
