@@ -66,9 +66,10 @@ pub fn print(input: &Path) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::{fs::remove_file, path::PathBuf};
 
-    fn make_copy_of_file<'a>() -> &'a Path {
-        let input = Path::new("assets/copy.png");
+    fn make_copy_of_file(input: &str) -> PathBuf {
+        let input = PathBuf::new().join("assets").join(input);
         std::fs::File::create(&input).unwrap();
         std::fs::copy("assets/pic.png", &input).unwrap();
         input
@@ -76,78 +77,83 @@ mod tests {
 
     #[test]
     fn test_encode() {
-        let input = make_copy_of_file();
+        let input = make_copy_of_file("encode.png");
         let chunk_type = "RuST".to_string();
         let message = "Message".to_string();
         let args = EncodeArgs {
             chunk_type,
             message,
         };
-        let res = encode(input, args);
+        let res = encode(&input, args);
         assert!(res.is_ok());
+        remove_file(input).unwrap();
     }
 
     #[test]
     fn test_decode() {
-        let input = make_copy_of_file();
+        let input = make_copy_of_file("decode.png");
         let chunk_type = "RuST".to_string();
         let message = "Message".to_string();
         let args = EncodeArgs {
             chunk_type,
             message,
         };
-        let res = encode(input, args);
+        let res = encode(&input, args);
         assert!(res.is_ok());
         let chunk_type = "RuST".to_string();
         let args = DecodeArgs { chunk_type };
-        let res = decode(input, args);
+        let res = decode(&input, args);
         assert!(res.is_ok());
+        remove_file(input).unwrap();
     }
 
     #[test]
     fn test_remove() {
-        let input = make_copy_of_file();
+        let input = make_copy_of_file("remove.png");
         let chunk_type = "RuST".to_string();
         let message = "Message".to_string();
         let args = EncodeArgs {
             chunk_type,
             message,
         };
-        let res = encode(input, args);
+        let res = encode(&input, args);
         assert!(res.is_ok());
         let chunk_type = "RuST".to_string();
         let args = RemoveArgs { chunk_type };
-        let res = remove(input, args);
+        let res = remove(&input, args);
         assert!(res.is_ok());
+        remove_file(input).unwrap();
     }
 
     #[test]
     fn test_print() {
-        let input = make_copy_of_file();
+        let input = make_copy_of_file("print.png");
         let res = print(&input);
         assert!(res.is_ok());
+        remove_file(input).unwrap();
     }
 
     #[test]
     fn test_all_one() {
-        let input = make_copy_of_file();
+        let input = make_copy_of_file("all_in.png");
         let chunk_type = "RuST".to_string();
         let message = "Message".to_string();
         let args = EncodeArgs {
             chunk_type,
             message,
         };
-        let res = encode(input, args);
+        let res = encode(&input, args);
         assert!(res.is_ok());
         let chunk_type = "RuST".to_string();
         let args = DecodeArgs { chunk_type };
-        let res = decode(input, args);
+        let res = decode(&input, args);
         assert!(res.is_ok());
         let chunk_type = "RuST".to_string();
         let args = RemoveArgs { chunk_type };
-        let res = remove(input, args);
+        let res = remove(&input, args);
         assert!(res.is_ok());
         let res = print(&input);
         assert!(res.is_ok());
+        remove_file(input).unwrap();
     }
 }
