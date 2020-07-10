@@ -12,29 +12,30 @@ const HEADER_LENGHT: usize = 8;
 impl Png {
     const STANDARD_HEADER: [u8; HEADER_LENGHT] = [137, 80, 78, 71, 13, 10, 26, 10];
 
-    fn from_chunks(chunks: Vec<Chunk>) -> Png {
+    pub fn from_chunks(chunks: Vec<Chunk>) -> Png {
         Png { chunks }
     }
 
-    fn chunks(&self) -> &[Chunk] {
+    pub fn chunks(&self) -> &[Chunk] {
         &self.chunks
     }
 
-    fn append_chunk(&mut self, chunk: Chunk) {
+    pub fn append_chunk(&mut self, chunk: Chunk) {
         self.chunks.push(chunk);
     }
 
+    #[allow(dead_code)]
     fn header(&self) -> &[u8; HEADER_LENGHT] {
         &Png::STANDARD_HEADER
     }
 
-    fn chunk_by_type(&self, chunk_type: &str) -> Option<&Chunk> {
+    pub fn chunk_by_type(&self, chunk_type: &str) -> Option<&Chunk> {
         self.chunks
             .iter()
             .find(|chunk| &chunk.chunk_type().to_string() == chunk_type)
     }
 
-    fn remove_chunk(&mut self, chunk_type: &str) -> Result<Chunk> {
+    pub fn remove_chunk(&mut self, chunk_type: &str) -> Result<Chunk> {
         let maybe_pos = self
             .chunks
             .iter()
@@ -42,11 +43,11 @@ impl Png {
             .find(|(_, chunk)| &chunk.chunk_type().to_string() == chunk_type);
         match maybe_pos {
             Some((pos, _)) => Ok(self.chunks.remove(pos)),
-            None => Err(Error::Custom("Cannot remove chunk")),
+            None => Err(Error::Custom("Unable to remove chunk")),
         }
     }
 
-    fn as_bytes(&self) -> Vec<u8> {
+    pub fn as_bytes(&self) -> Vec<u8> {
         [
             Png::STANDARD_HEADER.to_vec(),
             self.chunks
