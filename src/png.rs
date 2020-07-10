@@ -2,6 +2,7 @@ use crate::{chunk::Chunk, Error, Result, BYTE_SIZE};
 use std::convert::TryFrom;
 use std::convert::TryInto;
 
+#[derive(Debug)]
 pub struct Png {
     chunks: Vec<Chunk>,
 }
