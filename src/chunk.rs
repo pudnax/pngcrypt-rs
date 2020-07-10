@@ -1,7 +1,7 @@
 use std::convert::TryFrom;
 
 use std::convert::TryInto;
-use std::fmt::{self, Display};
+use std::fmt;
 
 use crate::{
     chunk_type::ChunkType,
@@ -10,7 +10,6 @@ use crate::{
 };
 
 // TODO(#3): Does it make sence too use Vec?
-// TODO(#5): Do we need to use #[repr(C)] to proper alighment?
 pub struct Chunk {
     length: u32,
     chunk_type: ChunkType,
@@ -42,7 +41,6 @@ impl Chunk {
         &self.chunk_data
     }
 
-    // TODO(#4): Delete public idetifier
     pub fn data_as_string(&self) -> Result<String> {
         Ok(String::from_utf8(self.chunk_data.clone())?)
     }
@@ -92,9 +90,24 @@ impl TryFrom<&[u8]> for Chunk {
     }
 }
 
-impl Display for Chunk {
+impl fmt::Debug for Chunk {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.to_string())
+        writeln!(f, "Chunk {{",)?;
+        writeln!(f, "  Length: {}", self.length())?;
+        writeln!(f, "  Type: {}", self.chunk_type())?;
+        writeln!(f, "  Data size: {} bytes", self.data().len())?;
+        writeln!(f, "  Crc: {}", self.crc())?;
+        writeln!(f, "}}")?;
+        Ok(())
+    }
+}
+
+impl fmt::Display for Chunk {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, " Type: {}", self.chunk_type())?;
+        writeln!(f, "  Data size: {} bytes", self.data().len())?;
+        writeln!(f, "  Crc: {}", self.crc())?;
+        Ok(())
     }
 }
 
