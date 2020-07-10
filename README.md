@@ -1,7 +1,7 @@
 # pngcrypt-rs
 
 ![Rust](https://github.com/disDeal/pngcrypt-rs/workflows/Rust/badge.svg)
-[![Crates.io](https://img.shields.io/crates/v/clap?style=flat-square)](https://crates.io/crates/pngme)
+[![Crates.io](https://img.shields.io/crates/v/pngme.svg)](https://crates.io/crates/pngme)
 
 ## Installation
 
