@@ -1,4 +1,3 @@
-#![feature(stmt_expr_attributes)]
 use pngme::{args::Opt, decode, encode, print, remove, Decode, Encode, Print, Remove, Result};
 use structopt::StructOpt;
 
@@ -17,12 +16,23 @@ fn main() {
 fn run() -> Result<()> {
     let opt = Opt::from_args();
 
-    #[rustfmt::skip]
     match opt {
-        Opt { input, commands: Encode(args) } => encode(input, args)?,
-        Opt { input, commands: Decode(args) } => decode(input, args)?,
-        Opt { input, commands: Remove(args) } => remove(input, args)?,
-        Opt { input, commands: Print(_)     } => print(&input)?,
+        Opt {
+            input,
+            commands: Encode(args),
+        } => encode(input, args)?,
+        Opt {
+            input,
+            commands: Decode(args),
+        } => decode(input, args)?,
+        Opt {
+            input,
+            commands: Remove(args),
+        } => remove(input, args)?,
+        Opt {
+            input,
+            commands: Print(_),
+        } => print(&input)?,
     }
     Ok(())
 }
