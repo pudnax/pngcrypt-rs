@@ -22,7 +22,7 @@ pngme 0.1.0
 Command line program that lets you hide secret messages in PNG files
 
 USAGE:
-    pngme <SUBCOMMAND>
+    pngme <input> <SUBCOMMAND>
 
 FLAGS:
     -h, --help       Prints help information
@@ -40,12 +40,12 @@ SUBCOMMANDS:
 ## Usage
 
 ```Bash
-cargo run -q -- encode pic.png RuST "Lorem ipsum dolor sit amet"
+cargo run -q -- pic.png encode RuST "Lorem ipsum dolor sit amet"
 
-cargo run -q -- decode pic.png RuST
+cargo run -q -- pic.png decode RuST
 Hidden message in the chunk RuST: 'Lorem ipsum dolor sit amet'
 
-cargo run -q -- print pic.png
+cargo run -q -- pic.png print 
 File: pic.png, Size: 4533476
 
 (1) Type: IHDR
@@ -64,7 +64,7 @@ File: pic.png, Size: 4533476
   Data size: 26 bytes
   Crc: 464893539
 
-cargo run -q -- remove pic.png RuST
+cargo run -q -- pic.png remove RuST
 ```
 
 ## Licence
