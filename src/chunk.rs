@@ -1,7 +1,7 @@
 use std::convert::TryFrom;
 
 use std::convert::TryInto;
-use std::fmt::{self, Display};
+use std::fmt;
 
 use crate::{
     chunk_type::ChunkType,
@@ -89,14 +89,24 @@ impl TryFrom<&[u8]> for Chunk {
         })
     }
 }
-impl fmt::Display for Chunk {
+
+impl fmt::Debug for Chunk {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "Chunk {{",)?;
         writeln!(f, "  Length: {}", self.length())?;
         writeln!(f, "  Type: {}", self.chunk_type())?;
-        writeln!(f, "  Data: {} bytes", self.data().len())?;
+        writeln!(f, "  Data size: {} bytes", self.data().len())?;
         writeln!(f, "  Crc: {}", self.crc())?;
-        writeln!(f, "}}",)?;
+        writeln!(f, "}}")?;
+        Ok(())
+    }
+}
+
+impl fmt::Display for Chunk {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, " Type: {}", self.chunk_type())?;
+        writeln!(f, "  Data size: {} bytes", self.data().len())?;
+        writeln!(f, "  Crc: {}", self.crc())?;
         Ok(())
     }
 }
