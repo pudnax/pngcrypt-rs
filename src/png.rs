@@ -69,7 +69,7 @@ impl TryFrom<&[u8]> for Png {
         let mut chunks: Vec<Chunk> = Vec::new();
         while pivot < value.len() {
             let lenght = u32::from_be_bytes(value[pivot..pivot + BYTE_SIZE].try_into()?) as usize;
-            let offset = dbg!(lenght) + 3 * BYTE_SIZE;
+            let offset = lenght + 3 * BYTE_SIZE;
             chunks.push(value[pivot..pivot + offset].try_into()?);
             pivot += offset;
         }
