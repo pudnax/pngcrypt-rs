@@ -1,5 +1,7 @@
 # pngcrypt-rs
 
+![Rust](https://github.com/disDeal/pngcrypt-rs/workflows/Rust/badge.svg)
+
 ## Installation
 
 At this point I don't want to publish to crates.io, so the only way to
