@@ -8,7 +8,7 @@ description = "A command line program that lets you hide secret messages in PNG 
 repository = "https://github.com/disDeal/pngcrypt-rs"
 readme = "README.md"
 keywords = ["crypto", "png", "image", "commandline", "steganography"]
-categories = ["command-line-utilities", "Encodeing", "Images"]
+categories = ["command-line-utilities", "Encoding", "Images"]
 exclude = [".gitignore", ".github"]
 
 [badges]
