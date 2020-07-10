@@ -7,6 +7,7 @@ pub mod png;
 
 pub use chunk::Chunk;
 pub use chunk_type::ChunkType;
+pub use commands::{decode, encode, print, remove};
 pub use png::Png;
 
 pub const BYTE_SIZE: usize = 4;
