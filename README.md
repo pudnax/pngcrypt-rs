@@ -1,11 +1,16 @@
 # pngcrypt-rs
 
 ![Rust](https://github.com/disDeal/pngcrypt-rs/workflows/Rust/badge.svg)
+[![Crates.io](https://img.shields.io/crates/v/clap?style=flat-square)](https://crates.io/crates/pngme)
 
 ## Installation
 
-At this point I don't want to publish on crates.io, so the only way to
-install the application is to download the source code and build locally.
+```Bash
+cargo install pngme
+```
+
+You also can install the application by to downloading the source code
+and build locally.
 
 ```Bash
 # or through ssh git@github.com:disDeal/pngcrypt-rs.git
