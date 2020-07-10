@@ -68,7 +68,7 @@ mod tests {
     use super::*;
 
     fn make_copy_of_file<'a>() -> &'a Path {
-        let input = Path::new("copy.png");
+        let input = Path::new("assets/copy.png");
         std::fs::File::create(&input).unwrap();
         std::fs::copy("assets/pic.png", &input).unwrap();
         input
