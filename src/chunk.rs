@@ -66,9 +66,6 @@ impl TryFrom<&[u8]> for Chunk {
 
     fn try_from(value: &[u8]) -> Result<Self> {
         let length = u32::from_be_bytes(value[0..BYTE_SIZE].try_into()?) as usize;
-        if value.len() != length + 3 * BYTE_SIZE {
-            return Err(Error::Custom("ChunkData does not contain enough bytes"));
-        }
         let data: [u8; BYTE_SIZE] = value[BYTE_SIZE..BYTE_SIZE + BYTE_SIZE].try_into()?;
         let chunk_type: ChunkType = data.try_into()?;
         let chunk_data = value[2 * BYTE_SIZE..2 * BYTE_SIZE + length].to_vec();
