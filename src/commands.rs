@@ -12,7 +12,7 @@ use std::{
 
 fn take_png<P: AsRef<Path>>(input: P) -> Result<Png> {
     let mut file = OpenOptions::new().write(true).read(true).open(input)?;
-    let mut buffer = Vec::with_capacity(1000_000);
+    let mut buffer = Vec::with_capacity(1_000_000);
 
     file.read_to_end(&mut buffer)?;
     Ok(buffer.as_slice().try_into()?)

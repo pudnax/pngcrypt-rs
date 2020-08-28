@@ -32,7 +32,7 @@ impl Png {
     pub fn chunk_by_type(&self, chunk_type: &str) -> Option<&Chunk> {
         self.chunks
             .iter()
-            .find(|chunk| &chunk.chunk_type().to_string() == chunk_type)
+            .find(|chunk| chunk.chunk_type().to_string() == chunk_type)
     }
 
     pub fn remove_chunk(&mut self, chunk_type: &str) -> Result<Chunk> {
@@ -40,7 +40,7 @@ impl Png {
             .chunks
             .iter()
             .enumerate()
-            .find(|(_, chunk)| &chunk.chunk_type().to_string() == chunk_type);
+            .find(|(_, chunk)| chunk.chunk_type().to_string() == chunk_type);
         match maybe_pos {
             Some((pos, _)) => Ok(self.chunks.remove(pos)),
             None => Err(Error::Custom("Unable to remove chunk")),
@@ -63,7 +63,7 @@ impl TryFrom<&[u8]> for Png {
     type Error = Error<'static>;
 
     fn try_from(value: &[u8]) -> Result<Self> {
-        if &value[0..HEADER_LENGHT] != Png::STANDARD_HEADER {
+        if value[0..HEADER_LENGHT] != Png::STANDARD_HEADER {
             return Err(Error::Custom("An invalid header is provided."));
         }
         let mut pivot = HEADER_LENGHT;

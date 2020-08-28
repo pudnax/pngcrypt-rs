@@ -53,11 +53,7 @@ impl TryFrom<[u8; 4]> for ChunkType {
 
 impl fmt::Display for ChunkType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{}",
-            std::str::from_utf8(&self.0).map_err(|e| Error::from(e))?
-        )
+        write!(f, "{}", std::str::from_utf8(&self.0).map_err(Error::from)?)
     }
 }
 
